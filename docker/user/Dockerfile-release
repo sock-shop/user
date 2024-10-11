@@ -5,6 +5,7 @@ WORKDIR /go/src/github.com/microservices-demo/user/
 
 RUN apk update
 RUN apk add git
+RUN git config --global http.postBuffer 524288000
 RUN go get -v github.com/Masterminds/glide 
 RUN glide install && CGO_ENABLED=0 go build -a -installsuffix cgo -o /user main.go
 
