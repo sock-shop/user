@@ -38,17 +38,24 @@ jobs:
       - name: Setup PATH
         run: echo "${GOPATH}/bin" >> $GITHUB_PATH
 
-      - name: Install dependencies
-        run: make deps
-        # https://repo.mongodb.org/apt/ubuntu/dists/bionic/mongodb-org/3.6/
+      -
+       name: Install dependencies
+       run: make deps
 
-      - name: Install/Downgrade MongoDB to version 3.6
+      -
+       name: Install/Downgrade MongoDB to version 3.6
+       run: |
+        wget -qO - https://pgp.mongodb.com/server-3.6.asc | sudo tee /etc/apt/trusted.gpg.d/mongodb-org-3.6.gpg
+        echo "deb [ arch=amd64 ] https://repo.mongodb.org/apt/ubuntu bionic/mongodb-org/3.6 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-3.6.list
+        sudo apt-get update
+        sudo apt-get install -y --allow-downgrades mongodb-org=3.6.20 mongodb-org-server=3.6.20 mongodb-org-shell=3.6.20 mongodb-org-mongos=3.6.20 mongodb-org-tools=3.6.20 || echo "Error is misleading, it was successfully installed"      
+
+      #      - name: Install/Downgrade MongoDB to version 3.6
+#        run: |
+#          wget -qO - https://www.mongodb.org/static/pgp/server-3.6.asc | sudo apt-key add -
 #          echo "deb [ arch=amd64 ] https://repo.mongodb.org/apt/ubuntu bionic/mongodb-org/3.6 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-3.6.list
-        run: |
-          wget -qO - https://www.mongodb.org/static/pgp/server-3.6.asc | sudo apt-key add -
-          echo "deb [ arch=amd64 ] https://repo.mongodb.org/apt/ubuntu/dists/bionic/mongodb-org/3.6/multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-3.6.list
-          sudo apt-get update
-          sudo apt-get install -y --allow-downgrades mongodb-org=3.6.20 mongodb-org-server=3.6.20 mongodb-org-shell=3.6.20 mongodb-org-mongos=3.6.20 mongodb-org-tools=3.6.20 || echo "Error is misleading, it was successfully installed"
+#          sudo apt-get update
+#          sudo apt-get install -y --allow-downgrades mongodb-org=3.6.20 mongodb-org-server=3.6.20 mongodb-org-shell=3.6.20 mongodb-org-mongos=3.6.20 mongodb-org-tools=3.6.20 || echo "Error is misleading, it was successfully installed"
 
       - name: Unit Tests
         run: glide novendor| xargs go test -v
