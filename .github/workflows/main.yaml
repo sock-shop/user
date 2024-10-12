@@ -74,15 +74,18 @@ jobs:
         env:
           IMAGE_TAG: ${{ steps.increment-git-tag.outputs.git-tag }}
         run: |
+          echo $IMAGE_TAG
           cd docker/user
-          docker build -t $GROUP/$REPO_USER:$IMAGE_TAG .
-          docker push $GROUP/$REPO_USER:$IMAGE_TAG
-
+          ls
+#          docker build -t $GROUP/$REPO_USER:$IMAGE_TAG .
+#          docker push $GROUP/$REPO_USER:$IMAGE_TAG
+#
       - name: Push user to Docker Hub
         id: build-push-user-image
         env:
           IMAGE_TAG: ${{ steps.increment-git-tag.outputs.git-tag }}
         run: |
           cd docker/user-db
-          docker build -t $GROUP/$REPO_USER:$IMAGE_TAG .
-          docker push $GROUP/$REPO_USER_DB:$IMAGE_TAG
+          ls
+#          docker build -t $GROUP/$REPO_USER:$IMAGE_TAG .
+#          docker push $GROUP/$REPO_USER_DB:$IMAGE_TAG
