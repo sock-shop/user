@@ -15,7 +15,7 @@ USER mongodb
 
 # Run MongoDB, execute the script, and shut down MongoDB
 RUN mongod --config /etc/mongodb.conf --bind_ip 127.0.0.1 & \
-    sleep 5 && /tmp/scripts/mongo_create_insert.sh && \
+    /tmp/scripts/mongo_create_insert.sh && \
     mongo --eval "db.getSiblingDB('admin').shutdownServer()"
 
 # Switch back to root to make the directory a VOLUME and fix any permission issues
@@ -29,6 +29,7 @@ VOLUME /data/db-users
 
 # Use CMD to run MongoDB with the new configuration
 CMD ["mongod", "--config", "/etc/mongodb.conf", "--smallfiles"]
+
 
 
 #FROM mongo:3
