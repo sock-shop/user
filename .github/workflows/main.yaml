@@ -22,7 +22,8 @@ jobs:
       GROUP: f3lin
       USERNAME: f3lin
       COMMIT: ${{ github.sha }}
-      REPO: user
+      REPO_USER: user
+      REPO_USER_DB: user-db
       GO_VERSION: 1.7.5
       GOPATH: /home/runner/work/user/user/go
 
@@ -79,23 +80,51 @@ jobs:
           username: ${{ env.USERNAME }}
           password: ${{ secrets.DOCKER_PASS }}
 
-      # Push to dockerhub
-      - name: Push user to Docker Hub
-        uses: docker/build-push-action@v6
-        if: startsWith(github.ref, 'refs/tags/v') || github.ref == 'refs/heads/main'
-        with:
-          file: docker/user/Dockerfile-release
-          tags: ${{ env.GROUP }}/${{ env.REPO }}:latest
-          #          path: go/src/github.com/microservices-demo/user
-#          tag_with_ref: true
-#          tag_with_sha: true
+      - name: Automatic Tagging of Releases
+        id: increment-git-tag
+        run: |
+          chmod +x scripts/git_update_tag.sh
+          bash scripts/git_update_tag.sh -v patch
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Push user-db to Docker Hub
-        uses: docker/build-push-action@v6
-        if: startsWith(github.ref, 'refs/tags/v') || github.ref == 'refs/heads/main'
-        with:
-          file: docker/user-db/Dockerfile
-          tags: ${{ env.GROUP }}/${{ env.REPO }}:latest
-#          path: go/src/github.com/microservices-demo/user/docker/user-db
-#          tag_with_ref: true
-#          tag_with_sha: true
+      - name: Push user to Docker Hub
+        id: build-push-image
+        env:
+          IMAGE_TAG: ${{ steps.increment-git-tag.outputs.git-tag }}
+        run: |
+          cd docker/user
+          docker build -t $GROUP/$REPO_USER:$IMAGE_TAG .
+          docker push $GROUP/$REPO_USER:$IMAGE_TAG
+
+      - name: Push user to Docker Hub
+        id: build-push-image
+        env:
+          IMAGE_TAG: ${{ steps.increment-git-tag.outputs.git-tag }}
+        run: |
+          cd docker/user-db
+          docker build -t $GROUP/$REPO_USER:$IMAGE_TAG .
+          docker push $GROUP/$REPO_USER_DB:$IMAGE_TAG
+
+#      # Push to dockerhub
+#      - name: Push user to Docker Hub
+#        uses: docker/build-push-action@v6
+#        if: startsWith(github.ref, 'refs/tags/v') || github.ref == 'refs/heads/main'
+#        with:
+#          push: true
+#          file: docker/user/Dockerfile-release
+#          tags: ${{ env.GROUP }}/${{ env.REPO }}:latest
+#          #          path: go/src/github.com/microservices-demo/user
+##          tag_with_ref: true
+##          tag_with_sha: true
+#
+#      - name: Push user-db to Docker Hub
+#        uses: docker/build-push-action@v6
+#        if: startsWith(github.ref, 'refs/tags/v') || github.ref == 'refs/heads/main'
+#        with:
+#          push: true
+#          file: docker/user-db/Dockerfile
+#          tags: ${{ env.GROUP }}/${{ env.REPO }}:latest
+##          path: go/src/github.com/microservices-demo/user/docker/user-db
+##          tag_with_ref: true
+##          tag_with_sha: true
