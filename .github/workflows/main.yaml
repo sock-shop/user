@@ -89,7 +89,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Push user to Docker Hub
-        id: build-push-image
+        id: build-push-user-db-image
         env:
           IMAGE_TAG: ${{ steps.increment-git-tag.outputs.git-tag }}
         run: |
@@ -98,7 +98,7 @@ jobs:
           docker push $GROUP/$REPO_USER:$IMAGE_TAG
 
       - name: Push user to Docker Hub
-        id: build-push-image
+        id: build-push-user-image
         env:
           IMAGE_TAG: ${{ steps.increment-git-tag.outputs.git-tag }}
         run: |
