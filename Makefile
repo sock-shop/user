@@ -68,6 +68,7 @@ mockservice:
 	docker run -d --name user-mock -h user-mock -v $(PWD)/apispec/mock.json:/data/db.json clue/json-server
 
 dockertest: dockerruntest
+	chmod +x scripts/testcontainer.sh
 	scripts/testcontainer.sh
 	docker run -h openapi --rm --name $(OPENAPI) --link user-dev -v $(PWD)/apispec/:/tmp/specs/\
 		weaveworksdemos/openapi /tmp/specs/$(INSTANCE).json\
