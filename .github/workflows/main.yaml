@@ -2,18 +2,23 @@ name: ci
 
 on:
   push:
-    branches:
-      - "*"  # run for branches
-    tags:
-      - "*"  # run for tags
-  pull_request:
-    branches:
-      - "*"  # run for branches
-    tags:
-      - "*"  # run for tags
+    branches: [ main ]
+#on:
+#  push:
+#    branches:
+#      - "*"  # run for branches
+#    tags:
+#      - "*"  # run for tags
+#  pull_request:
+#    branches:
+#      - "*"  # run for branches
+#    tags:
+#      - "*"  # run for tags
 
 jobs:
   test:
+    permissions:
+      contents: write # Required to push tags
 #    defaults:
 #      run:
 #        working-directory: go/src/github.com/microservices-demo/user
@@ -33,9 +38,9 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-        with:
-          fetch-depth: 1
-          path: go/src/github.com/microservices-demo/user
+#        with:
+#          fetch-depth: 1
+#          path: go/src/github.com/microservices-demo/user
 
       - uses: actions/setup-go@v5
         with:
