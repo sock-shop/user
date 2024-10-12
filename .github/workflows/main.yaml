@@ -71,11 +71,12 @@ jobs:
 #        env:
 #          COVERALLS_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 #        run: goveralls -coverprofile=cover.profile -service=github
-#      - name: Login to Docker Hub
-#        uses: docker/login-action@v3
-#        with:
-#          username: ${{ secrets.DOCKERHUB_USERNAME }}
-#          password: ${{ secrets.DOCKER_PASS }}
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKER_PASS }}
 
       # Push to dockerhub
       - name: Push user to Docker Hub
