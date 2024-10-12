@@ -14,9 +14,13 @@ on:
 
 jobs:
   test:
+#    defaults:
+#      run:
+#        working-directory: go/src/github.com/microservices-demo/user
     defaults:
       run:
-        working-directory: go/src/github.com/microservices-demo/user
+        shell: bash
+        working-directory: .
     runs-on: ubuntu-latest
     env:
       GROUP: f3lin
