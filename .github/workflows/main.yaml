@@ -45,10 +45,10 @@ jobs:
       -
        name: Install/Downgrade MongoDB to version 3.6
        run: |
-        wget -qO - https://pgp.mongodb.com/server-3.6.asc | sudo tee /etc/apt/trusted.gpg.d/mongodb-org-3.6.gpg
-        echo "deb [ arch=amd64 ] https://repo.mongodb.org/apt/ubuntu bionic/mongodb-org/3.6 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-3.6.list
-        sudo apt-get update
-        sudo apt-get install -y --allow-downgrades mongodb-org=3.6.20 mongodb-org-server=3.6.20 mongodb-org-shell=3.6.20 mongodb-org-mongos=3.6.20 mongodb-org-tools=3.6.20 || echo "Error is misleading, it was successfully installed"      
+         wget -qO - https://pgp.mongodb.com/server-3.6.asc | sudo tee /etc/apt/trusted.gpg.d/mongodb-org-3.6.gpg
+         echo "deb [trusted=yes arch=amd64] https://repo.mongodb.org/apt/ubuntu bionic/mongodb-org/3.6 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-3.6.list
+         sudo apt-get update
+         sudo apt-get install -y --allow-downgrades mongodb-org=3.6.20 mongodb-org-server=3.6.20 mongodb-org-shell=3.6.20 mongodb-org-mongos=3.6.20 mongodb-org-tools=3.6.20 || echo "Error is misleading, it was successfully installed"     
 
       #      - name: Install/Downgrade MongoDB to version 3.6
 #        run: |
