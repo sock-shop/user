@@ -38,30 +38,31 @@ jobs:
       - name: Setup PATH
         run: echo "${GOPATH}/bin" >> $GITHUB_PATH
 
-      -
-       name: Install dependencies
-       run: make deps
+      - name: Install dependencies
+        run: |
+          make deps
+          wget http://archive.ubuntu.com/ubuntu/pool/main/o/openssl/libssl1.1_1.1.1-1ubuntu2.1~18.04.20_amd64.deb
+          sudo dpkg -i libssl1.1_1.1.1-1ubuntu2.1~18.04.20_amd64.deb
 
-      -
-       name: Install/Downgrade MongoDB to version 3.6
-       run: |
-         wget -qO - https://pgp.mongodb.com/server-3.6.asc | sudo tee /etc/apt/trusted.gpg.d/mongodb-org-3.6.gpg
-         echo "deb [trusted=yes arch=amd64] https://repo.mongodb.org/apt/ubuntu bionic/mongodb-org/3.6 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-3.6.list
-         sudo apt-get update
-         sudo apt-get install -y --allow-downgrades mongodb-org=3.6.20 mongodb-org-server=3.6.20 mongodb-org-shell=3.6.20 mongodb-org-mongos=3.6.20 mongodb-org-tools=3.6.20 || echo "Error is misleading, it was successfully installed"     
+      - name: Install/Downgrade MongoDB to version 3.6
+        run: |
+          wget -qO - https://pgp.mongodb.com/server-3.6.asc | sudo tee /etc/apt/trusted.gpg.d/mongodb-org-3.6.gpg
+          echo "deb [trusted=yes arch=amd64] https://repo.mongodb.org/apt/ubuntu bionic/mongodb-org/3.6 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-3.6.list
+          sudo apt-get update
+          sudo apt-get install -y --allow-downgrades mongodb-org=3.6.20 mongodb-org-server=3.6.20 mongodb-org-shell=3.6.20 mongodb-org-mongos=3.6.20 mongodb-org-tools=3.6.20 || echo "Error is misleading, it was successfully installed"     
 
       #      - name: Install/Downgrade MongoDB to version 3.6
-#        run: |
-#          wget -qO - https://www.mongodb.org/static/pgp/server-3.6.asc | sudo apt-key add -
-#          echo "deb [ arch=amd64 ] https://repo.mongodb.org/apt/ubuntu bionic/mongodb-org/3.6 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-3.6.list
-#          sudo apt-get update
-#          sudo apt-get install -y --allow-downgrades mongodb-org=3.6.20 mongodb-org-server=3.6.20 mongodb-org-shell=3.6.20 mongodb-org-mongos=3.6.20 mongodb-org-tools=3.6.20 || echo "Error is misleading, it was successfully installed"
+      #        run: |
+      #          wget -qO - https://www.mongodb.org/static/pgp/server-3.6.asc | sudo apt-key add -
+      #          echo "deb [ arch=amd64 ] https://repo.mongodb.org/apt/ubuntu bionic/mongodb-org/3.6 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-3.6.list
+      #          sudo apt-get update
+      #          sudo apt-get install -y --allow-downgrades mongodb-org=3.6.20 mongodb-org-server=3.6.20 mongodb-org-shell=3.6.20 mongodb-org-mongos=3.6.20 mongodb-org-tools=3.6.20 || echo "Error is misleading, it was successfully installed"
 
       - name: Unit Tests
         run: glide novendor| xargs go test -v
 
-#      - name: Create cover profile
-#        run: make coverprofile
+      #      - name: Create cover profile
+      #        run: make coverprofile
 
       - name: Run Docker Test
         run: make dockertest
@@ -70,8 +71,7 @@ jobs:
         env:
           COVERALLS_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: goveralls -coverprofile=cover.profile -service=github
-      -
-        name: Login to Docker Hub
+      - name: Login to Docker Hub
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
