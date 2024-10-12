@@ -69,10 +69,10 @@ jobs:
       - name: Run Docker Test
         run: make dockertest
 
-#      - name: Submit Coveralls
-#        env:
-#          COVERALLS_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#        run: goveralls -coverprofile=cover.profile -service=github
+      #      - name: Submit Coveralls
+      #        env:
+      #          COVERALLS_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #        run: goveralls -coverprofile=cover.profile -service=github
 
       - name: Login to Docker Hub
         uses: docker/login-action@v3
