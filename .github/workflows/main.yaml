@@ -74,7 +74,7 @@ jobs:
         env:
           IMAGE_TAG: ${{ steps.increment-git-tag.outputs.git-tag }}
         run: |
-          echo $IMAGE_TAG
+          cp glide.yaml  docker/user-db
           cd docker/user
           docker build -f Dockerfile-release -t $GROUP/$REPO_USER:$IMAGE_TAG .
           docker push $GROUP/$REPO_USER:$IMAGE_TAG
@@ -84,6 +84,7 @@ jobs:
         env:
           IMAGE_TAG: ${{ steps.increment-git-tag.outputs.git-tag }}
         run: |
+          cp glide.yaml  docker/user-db
           cd docker/user-db
           docker build -t $GROUP/$REPO_USER:$IMAGE_TAG .
           docker push $GROUP/$REPO_USER_DB:$IMAGE_TAG
