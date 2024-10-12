@@ -16,13 +16,13 @@
 SCRIPT_DIR=$(dirname "$0")
 
 # Start MongoDB in the background
-mongod --fork --logpath /var/log/mongodb.log --dbpath /data/db/
+mongod --fork --logpath /var/log/mongodb.log --dbpath /data/db/  --bind_ip 127.0.0.1
 
 # Wait for MongoDB to be ready
-until mongo --eval "print(\"waited for connection\")" 127.0.0.1:27017; do
-    echo "Waiting for MongoDB to start..."
-    sleep 2
-done
+#until mongo --eval "print(\"waited for connection\")" 127.0.0.1:27017; do
+#    echo "Waiting for MongoDB to start..."
+#    sleep 2
+#done
 
 # Run your MongoDB scripts
 FILES=$SCRIPT_DIR/*-create.js
