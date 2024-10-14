@@ -70,17 +70,15 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Push user to Docker Hub
-        id: build-push-user-image
         env:
           IMAGE_TAG: ${{ steps.increment-git-tag.outputs.git-tag }}
         run: |
           docker build -t $GROUP/$REPO_USER:$IMAGE_TAG -f docker/user/Dockerfile-release .
           docker push $GROUP/$REPO_USER:$IMAGE_TAG
 #
-      - name: Push user to Docker Hub
-        id: build-push-user-db-image
+      - name: Push user-db to Docker Hub
         env:
           IMAGE_TAG: ${{ steps.increment-git-tag.outputs.git-tag }}
         run: |
-          docker build-t $GROUP/$REPO_USER:$IMAGE_TAG -f docker/user-db/Dockerfile docker/user-db/
+          docker build -t $GROUP/$REPO_USER:$IMAGE_TAG -f docker/user-db/Dockerfile docker/user-db/
           docker push $GROUP/$REPO_USER_DB:$IMAGE_TAG
