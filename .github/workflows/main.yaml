@@ -80,5 +80,5 @@ jobs:
         env:
           IMAGE_TAG: ${{ steps.increment-git-tag.outputs.git-tag }}
         run: |
-          docker build -t $GROUP/$REPO_USER:$IMAGE_TAG -f docker/user-db/Dockerfile docker/user-db/
+          docker build -t $GROUP/$REPO_USER_DB:$IMAGE_TAG -f docker/user-db/Dockerfile docker/user-db/
           docker push $GROUP/$REPO_USER_DB:$IMAGE_TAG
