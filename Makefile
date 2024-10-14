@@ -42,21 +42,21 @@ dockerdev:
 	docker build -t $(INSTANCE)-dev .
 
 dockertestdb:
-	docker build -t $(TESTDB) -f docker/user-db/Dockerfile docker/user-db/
+	docker build -t $(TESTDB) -f Dockerfile-db docker/user-db/
 
 dockerruntest: dockertestdb dockerdev
 	docker run -d --name my$(TESTDB) -h my$(TESTDB) $(TESTDB)
 	docker run -d --name $(INSTANCE)-dev -p 8084:8084 --link my$(TESTDB) -e MONGO_HOST="my$(TESTDB):27017" $(INSTANCE)-dev
 
 docker:
-	docker build -t $(NAME) -f docker/user/Dockerfile-release .
+	docker build -t $(NAME) -f Dockerfile-release .
 
 dockerlocal:
-	docker build -t $(INSTANCE)-local -f docker/user/Dockerfile-release .
+	docker build -t $(INSTANCE)-local -f Dockerfile-release .
 
 dockertravisbuild: 
-	docker build -t $(NAME):$(TAG) -f docker/user/Dockerfile-release .
-	docker build -t $(DBNAME):$(TAG) -f docker/user-db/Dockerfile docker/user-db/
+	docker build -t $(NAME):$(TAG) -f Dockerfile-release .
+	docker build -t $(DBNAME):$(TAG) -f Dockerfile-db docker/user-db/
 	if [ -z "$(DOCKER_PASS)" ]; then \
 		echo "This is a build triggered by an external PR. Skipping docker push."; \
 	else \
