@@ -1,5 +1,5 @@
 FROM mongo:3
-ADD ./docker/user-db/scripts /tmp/scripts
+ADD scripts /tmp/scripts
 
 # Ensure the script has executable permissions
 RUN chmod +x /tmp/scripts/mongo_create_insert.sh

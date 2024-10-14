@@ -74,7 +74,7 @@ jobs:
         env:
           IMAGE_TAG: ${{ steps.increment-git-tag.outputs.git-tag }}
         run: |
-          docker build -f Dockerfile-release -t $GROUP/$REPO_USER:$IMAGE_TAG .
+          docker build -t $GROUP/$REPO_USER:$IMAGE_TAG -f docker/user/Dockerfile-release .
           docker push $GROUP/$REPO_USER:$IMAGE_TAG
 #
       - name: Push user to Docker Hub
@@ -82,5 +82,5 @@ jobs:
         env:
           IMAGE_TAG: ${{ steps.increment-git-tag.outputs.git-tag }}
         run: |
-          docker build -f Dockerfile-db -t $GROUP/$REPO_USER:$IMAGE_TAG .
+          docker build-t $GROUP/$REPO_USER:$IMAGE_TAG -f docker/user-db/Dockerfile docker/user-db/
           docker push $GROUP/$REPO_USER_DB:$IMAGE_TAG
