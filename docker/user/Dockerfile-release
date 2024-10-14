@@ -32,4 +32,4 @@ RUN	chmod +x /user && \
 
 USER ${SERVICE_USER}
 
-CMD ["/user", "-port=8080"]
+CMD ["/user", "-port=80"]
